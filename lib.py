@@ -32,7 +32,7 @@ def shuffle_beats(songdata):
 
     pat = get_random_beat_pattern()
     slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
-    origin_len = len(origin_seg)
+    rest_ms = len(origin_seg)
     seek = 0
 
     while rest_ms > 0:
@@ -40,7 +40,7 @@ def shuffle_beats(songdata):
         for i in range(BEATS):
             start_seek = seek
             seek = seek + slicing_portion
-            if seek > rest_ms:
+            if seek > rest_ms: # what no clamp does to mfers
                 seek = rest_ms
             rest_ms = rest_ms - slicing_portion
             segs.append(origin_seg[start_seek:seek])
