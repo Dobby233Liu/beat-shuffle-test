@@ -37,6 +37,8 @@ def shuffle_beats(songdata):
         origin_aud = origin_aud + pydub.AudioSegment.silent(duration=(slicing_portion - (len(origin_aud) % slicing_portion)))
     rest_ms = len(origin_aud)
     seek = 0
+    if song["start"] is not None:
+        seek = s_to_ms(song["start"])
 
     while rest_ms > 0:
         segs = []
