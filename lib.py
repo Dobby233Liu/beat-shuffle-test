@@ -24,8 +24,8 @@ def arrange_like(origin, example):
     for i in range(len(origin)):
         if i == example[i]:
             ret.append(origin[i])
-        else:
-            raise IndexError("what")
+    if len(ret) != len(origin):
+        raise IndexError("what")
     return ret
 
 def shuffle_beats(songdata):
