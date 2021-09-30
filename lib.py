@@ -1,8 +1,52 @@
 import pydub
 import random
 
+BEATS = 4
+
 def get_random_beat_pattern():
-    return random.shuffle([1,2,3,4])
+    return random.shuffle(range(BEATS))
 
 def get_song_seg(songdata):
-    return AudioSegment.from_file(songdata["fn"], songdata["ff"])
+    return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
+
+def s_to_ms(n):
+    return n * 1000
+
+def each_beat_takes_seconds(bpm):
+    return bpm / 60
+
+def arrange_like(origin, example):
+    if len(origin) != len(example):
+        raise Exception("no")
+    ret = []
+    for i in range(len(origin)):
+        if i + 1 == example[i]:
+            ret.append(origin[i])
+    return ret
+
+def shuffle_beats(songdata):
+    origin_seg = get_song_seg(songdata)
+    new_seg = pydub.AudioSegment.empty()
+
+    pat = get_random_beat_pattern()
+    slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
+    origin_len = len(origin_seg)
+    seek = 0
+
+    while rest_ms > 0:
+        segs = []
+        for i in range(BEATS):
+            start_seek = seek
+            seek = seek + slicing_portion
+            if seek > rest_ms:
+                seek = rest_ms
+            rest_ms = rest_ms - slicing_portion
+            segs.append(origin_seg[start_seek:seek])
+        segs = arrange_like(segs, pat)
+        for i in segs:
+            new_seg.append(i)
+
+    return new_seg
+
+def make_lemonade(songdata):
+    shuffle_beats(songdata).export("shuffled_"+songdata["fn"]+".wav", format="wav")
