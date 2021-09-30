@@ -33,8 +33,8 @@ def shuffle_beats(songdata):
 
     pat = get_random_beat_pattern()
     slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
-    if len(origin_aud) % slicing_portion != 0: # add padding
-        origin_aud = origin_aud + pydub.AudioSegment.silent(duration=(slicing_portion - (len(origin_aud) % slicing_portion)))
+    #if len(origin_aud) % slicing_portion != 0: # add padding
+    #    origin_aud = origin_aud + pydub.AudioSegment.silent(duration=(slicing_portion - (len(origin_aud) % slicing_portion)))
     rest_ms = len(origin_aud)
     seek = 0
     if song["start"] is not None:
@@ -45,7 +45,11 @@ def shuffle_beats(songdata):
         for _ in range(BEATS):
             start_seek = seek
             seek = seek + slicing_portion
-            rest_ms = rest_ms - slicing_portion
+            if (seek - start_seek) > rest_ms:
+                seek = rest_ms
+                rest_ms = 0
+            else:
+                rest_ms = rest_ms - slicing_portion
             seg = origin_aud[start_seek:seek]
             seg = seg.apply_gain(-seg.max_dBFS)
             segs.append(seg)
