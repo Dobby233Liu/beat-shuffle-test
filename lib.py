@@ -4,7 +4,7 @@ import random
 BEATS = 4
 
 def get_random_beat_pattern():
-    return random.shuffle(list(range(BEATS)))
+    return random.shuffle([*range(BEATS)])
 
 def get_song_seg(songdata):
     return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
@@ -31,7 +31,6 @@ def shuffle_beats(songdata):
     new_seg = pydub.AudioSegment.empty()
 
     pat = get_random_beat_pattern()
-    print(pat)
     slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
     rest_ms = len(origin_seg)
     seek = 0
