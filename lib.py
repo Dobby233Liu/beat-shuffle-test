@@ -21,11 +21,8 @@ def arrange_like(origin, example):
     if len(origin) != len(example):
         raise Exception("no")
     ret = []
-    for i in range(len(origin)):
-        if i == example[i]:
-            ret.append(origin[i])
-    if len(ret) != len(origin):
-        raise IndexError("what")
+    for i in example:
+        ret.append(origin[i])
     return ret
 
 def shuffle_beats(songdata):
