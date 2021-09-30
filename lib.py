@@ -53,6 +53,6 @@ def shuffle_beats(songdata):
 
 def make_lemonade(songdata):
     out = shuffle_beats(songdata)
-    fn = "shuffled_" + ''.join(out[1]) + "_" + songdata["fn"] + ".wav"
+    fn = "shuffled_" + ''.join([str(i) for i in out[1]]) + "_" + songdata["fn"] + ".wav"
     out[0].export(fn, format="wav")
     return fn
