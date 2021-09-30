@@ -15,6 +15,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install pydub
-        sudo apt-get install ffmpeg libavcodec-extra
+        sudo apt-get install ffmpeg
     - name: Less go
       run: python main.py
