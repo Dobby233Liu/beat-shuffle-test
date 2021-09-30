@@ -4,7 +4,7 @@ import random
 BEATS = 4
 
 def get_random_beat_pattern():
-    return random.shuffle(range(BEATS))
+    return random.shuffle(list(range(BEATS)))
 
 def get_song_seg(songdata):
     return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
@@ -22,6 +22,8 @@ def arrange_like(origin, example):
     for i in range(len(origin)):
         if i + 1 == example[i]:
             ret.append(origin[i])
+        else:
+            raise IndexError("what")
     return ret
 
 def shuffle_beats(songdata):
