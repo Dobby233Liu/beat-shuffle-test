@@ -3,4 +3,5 @@ song = {}
 song["fn"] = "cyber.ogg"
 song["ff"] = "ogg"
 
-song["bpm"] = 110
+song["bpm"] = 115
+# Time sign may be useful
