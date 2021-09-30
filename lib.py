@@ -27,18 +27,18 @@ def arrange_like(origin, example):
 
 def shuffle_beats(songdata):
     origin_seg = get_song_seg(songdata)
-    new_seg = pydub.AudioSegment.empty()
+    new_aud = pydub.AudioSegment.empty()
 
     pat = get_random_beat_pattern()
     slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
-    if len(origin_seg) % slicing_portion != 0: # add padding
-        origin_seg = origin_seg + pydub.AudioSegment.silent(duration=(slicing_portion - (len(origin_seg) % slicing_portion)))
-    rest_ms = len(origin_seg)
+    if len(origin_aud) % slicing_portion != 0: # add padding
+        origin_seg = origin_aud + pydub.AudioSegment.silent(duration=(slicing_portion - (len(origin_aud) % slicing_portion)))
+    rest_ms = len(origin_aud)
     seek = 0
 
     while rest_ms > 0:
         segs = []
-        for i in range(BEATS):
+        for _ in range(BEATS):
             start_seek = seek
             seek = seek + slicing_portion
             if seek > rest_ms: # what no clamp does to mfers
@@ -46,10 +46,10 @@ def shuffle_beats(songdata):
             rest_ms = rest_ms - slicing_portion
             segs.append(origin_seg[start_seek:seek])
         segs = arrange_like(segs, pat)
-        for i in segs:
-            new_seg.append(i, crossfade=0)
+        for seg in segs:
+            new_aud = new_aud + seg
 
-    return new_seg, [i + 1 for i in pat]
+    return new_aud, [i + 1 for i in pat]
 
 def make_lemonade(songdata):
     out = shuffle_beats(songdata)
