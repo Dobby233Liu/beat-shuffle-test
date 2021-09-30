@@ -23,6 +23,7 @@ def arrange_like(origin, example):
     ret = []
     for i in example:
         ret.append(origin[i])
+    print(ret, file=sys.stderr)
     return ret
 
 def shuffle_beats(songdata):
