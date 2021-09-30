@@ -46,10 +46,6 @@ def shuffle_beats(songdata):
                 seek = rest_ms
             rest_ms = rest_ms - slicing_portion
             segs.append(origin_seg[start_seek:seek])
-        if pat is None:
-            raise Exception("?")
-        elif segs is None:
-            raise Exception("?????")
         segs = arrange_like(segs, pat)
         for i in segs:
             new_seg.append(i)
