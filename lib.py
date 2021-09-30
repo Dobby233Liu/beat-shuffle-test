@@ -26,7 +26,7 @@ def arrange_like(origin, example):
     return ret
 
 def shuffle_beats(songdata):
-    origin_seg = get_song_seg(songdata)
+    origin_aud = get_song_seg(songdata)
     new_aud = pydub.AudioSegment.empty()
 
     pat = get_random_beat_pattern()
