@@ -4,7 +4,7 @@ import random
 BEATS = 4
 
 def get_random_beat_pattern():
-    return random.shuffle([*range(BEATS)])
+    return random.shuffle(list(range(BEATS)))
 
 def get_song_seg(songdata):
     return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
@@ -20,7 +20,7 @@ def arrange_like(origin, example):
         raise Exception("no")
     ret = []
     for i in range(len(origin)):
-        if i + 1 == example[i]:
+        if i == example[i]:
             ret.append(origin[i])
         else:
             raise IndexError("what")
@@ -44,6 +44,10 @@ def shuffle_beats(songdata):
                 seek = rest_ms
             rest_ms = rest_ms - slicing_portion
             segs.append(origin_seg[start_seek:seek])
+        if pat is None:
+            raise Exception("?")
+        elif segs is None:
+            raise Exception("?????")
         segs = arrange_like(segs, pat)
         for i in segs:
             new_seg.append(i)
