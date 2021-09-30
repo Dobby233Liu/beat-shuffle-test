@@ -17,7 +17,7 @@ def s_to_ms(n):
     return n * 1000
 
 def each_beat_takes_seconds(bpm):
-    return bpm / 60
+    return 60 / bpm
 
 def arrange_like(origin, example):
     if len(origin) != len(example):
