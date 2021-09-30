@@ -53,6 +53,6 @@ def shuffle_beats(songdata):
 
 def make_lemonade(songdata):
     out = shuffle_beats(songdata)
-    fn = "shuffled_" + ''.join([str(i) for i in out[1]]) + "_" + songdata["fn"] + ".wav"
-    out[0].export(fn, format="wav")
+    fn = "shuffled_" + ''.join([str(i) for i in out[1]]) + "_" + songdata["fn"] + (songdata["ff"] != "ogg" and ".ogg" or "")
+    out[0].export(fn, format="ogg")
     return fn
