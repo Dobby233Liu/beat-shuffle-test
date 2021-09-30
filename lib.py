@@ -49,9 +49,10 @@ def shuffle_beats(songdata):
         for i in segs:
             new_seg.append(i, crossfade=0)
 
-    return new_seg
+    return new_seg, [i + 1 for i in pat]
 
 def make_lemonade(songdata):
-    fn = "shuffled_" + songdata["fn"] + ".wav"
-    shuffle_beats(songdata).export(fn, format="wav")
+    out = shuffle_beats(songdata)
+    fn = "shuffled_" + ''.join(out[1]) + "_" + songdata["fn"] + ".wav"
+    out[0].export(fn, format="wav")
     return fn
