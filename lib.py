@@ -1,5 +1,6 @@
 import pydub
 import random
+import sys
 
 BEATS = 4
 
@@ -23,7 +24,7 @@ def arrange_like(origin, example):
     ret = []
     for i in example:
         ret.append(origin[i])
-    print(ret, file=sys.stderr)
+    print(str(ret), file=sys.stderr)
     return ret
 
 def shuffle_beats(songdata):
@@ -42,8 +43,6 @@ def shuffle_beats(songdata):
         for _ in range(BEATS):
             start_seek = seek
             seek = seek + slicing_portion
-            if seek > rest_ms: # what no clamp does to mfers
-                seek = rest_ms
             rest_ms = rest_ms - slicing_portion
             segs.append(origin_seg[start_seek:seek])
         segs = arrange_like(segs, pat)
