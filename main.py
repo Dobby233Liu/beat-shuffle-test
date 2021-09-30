@@ -6,8 +6,8 @@ x = 0
 
 try:
     print(make_lemonade(a_cybers_world.song))
-catch:
+except:
     x = 1
     raise
-
-sys.exit(x)
+finally:
+    sys.exit(x)
