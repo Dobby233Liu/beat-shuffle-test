@@ -63,7 +63,7 @@ def shuffle_beats(songdata):
             segs.append(seg)
         segs = arrange_like(segs, pat)
         for part in segs:
-            new_aud = new_aud.append(part, crossfade=(len(new_aud) > 0 and 100 or 0))
+            new_aud = new_aud.append(part, crossfade=0)
 
     new_aud = new_aud.apply_gain(-new_aud.max_dBFS).remove_dc_offset()
 
@@ -73,6 +73,5 @@ def make_lemonade(songdata):
     out = shuffle_beats(songdata)
     fn = "shuffled_" + ''.join([str(i) for i in out[1]]) + "_" + songdata["fn"]
     fn = fn + (fn.endswith(".ogg") and "" or ".ogg")
-    print(fn)
     out[0].export(fn, format="ogg")
     return fn
