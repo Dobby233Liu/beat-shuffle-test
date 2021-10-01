@@ -54,9 +54,8 @@ def shuffle_beats(songdata):
             start_seek = seek
             seek = seek + slicing_portion
             if (seek - start_seek) > rest_ms:
-                seek = start_seek + rest_ms
-                assert(seek == len(origin_aud) - 1)
-                print(str(beat) + ": " + "REMAINDER FAILSAFE")
+                seek = len(origin_aud) - 1
+                print(str(beat) + ": " + "REMAINDER FAILSAFE, seek set to %d" % seek)
             rest_ms = rest_ms - (seek - start_seek + 1)
             if (seek - start_seek) == 0:
                 print(str(beat) + ": " + "appending nothing")
