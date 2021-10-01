@@ -69,7 +69,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
 def shuffle_beats(songdata):
     songseg = get_song_seg(songdata)
     beats = BEATS
-    while beats != 1:
+    while beats > 1:
         songseg = _shuffle_beats(songdata, songseg, beats=beats)
         beats = beats / (4 / 2)
     return songseg
