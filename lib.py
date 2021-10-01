@@ -62,6 +62,7 @@ def shuffle_beats(songdata):
             if seek >= (supposed_len - 1):
                 seek = supposed_len - 1
                 print(str(beat) + ": " + "REMAINDER FAILSAFE, seek set to %d" % seek)
+                filler = True
             assert(not (seek < 0 or seek < start_seek))
             seg = origin_aud[start_seek:seek]
             seg = seg.apply_gain(-seg.max_dBFS).remove_dc_offset()
