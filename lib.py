@@ -37,7 +37,7 @@ def chaos(seg):
         seg = seg.invert_phase()
     if russian_roulette(12):
         samples = seg.get_array_of_samples()
-        r = random.randrange(0, 2, len(samples))
+        r = random.randrange(0, len(samples), 2)
         samples.pop(r)
         samples.pop(r + 1)
         seg = seg._spawn(samples)
