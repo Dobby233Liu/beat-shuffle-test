@@ -49,9 +49,6 @@ def shuffle_beats(songdata):
             if len(buf) <= 0:
                 break
             cutoff = slicing_portion
-            if cutoff > (len(buf)-1):
-                cutoff = (len(buf)-1)
-                print(str(beat) + ": " + "REMAINDER FAILSAFE")
             seg = buf[:cutoff]
             buf = buf[cutoff:]
             seg = seg.apply_gain(-seg.max_dBFS).remove_dc_offset()
