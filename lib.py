@@ -4,7 +4,7 @@ import math
 import sys
 
 BEATS = 4
-CF_AMOUNT = 5
+CF_AMOUNT = 10
 
 def get_random_beat_pattern(beats=BEATS):
     # r = list(range(beats))
