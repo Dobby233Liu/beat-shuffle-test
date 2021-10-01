@@ -50,7 +50,7 @@ def shuffle_beats(songdata):
         segs = []
         for beat in range(BEATS):
             start_seek = seek
-            seek = seek + slicing_portion
+            seek = seek + slicing_portion - 1
             if (seek - start_seek) > rest_ms:
                 seek = rest_ms
                 rest_ms = 0
@@ -63,7 +63,7 @@ def shuffle_beats(songdata):
             segs.append(seg)
         segs = arrange_like(segs, pat)
         for part in segs:
-            new_aud = new_aud.append(part)
+            new_aud = new_aud.append(part, crossfade=10)
 
     new_aud = new_aud.apply_gain(-new_aud.max_dBFS).remove_dc_offset()
 
