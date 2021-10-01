@@ -56,7 +56,7 @@ def shuffle_beats(songdata):
                 rest_ms = 0
                 print("FAILSAFE")
             else:
-                rest_ms = rest_ms - (seek - start_seek - 1)
+                rest_ms = rest_ms - (seek - start_seek)
             print(str(beat) + ": " + "%d:%d, remainder %d" % (start_seek, seek, rest_ms))
             seg = origin_aud[start_seek:seek]
             seg = seg.apply_gain(-seg.max_dBFS).remove_dc_offset()
