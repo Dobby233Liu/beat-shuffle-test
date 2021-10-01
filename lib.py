@@ -63,7 +63,7 @@ def shuffle_beats(songdata):
             segs.append(seg)
         segs = arrange_like(segs, pat)
         for part in segs:
-            new_aud = new_aud.append(part, crossfade=10)
+            new_aud = new_aud.append(part, crossfade=(len(new_aud) <= 0 ? 100 : 0))
 
     new_aud = new_aud.apply_gain(-new_aud.max_dBFS).remove_dc_offset()
 
