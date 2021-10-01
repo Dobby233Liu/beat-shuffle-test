@@ -56,15 +56,13 @@ def shuffle_beats(songdata):
             cutoff = slicing_portion
             seg = buf[:cutoff]
             buf = buf[cutoff:]
-            seg = chaos(seg.apply_gain(-seg.max_dBFS).remove_dc_offset())
-            segs.append(seg)
+            segs.append(chaos(seg))
         segs = arrange_like(segs, pat)
         for part in segs:
             new_aud = new_aud.append(chaos(part), crossfade=0)
         pat = get_random_beat_pattern()
 
-    new_aud = chaos(new_aud.apply_gain(-new_aud.max_dBFS).remove_dc_offset())
-    assert(len(new_aud) == supposed_len)
+    new_aud = chaos(new_aud)
 
     return new_aud
 
