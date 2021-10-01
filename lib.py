@@ -14,7 +14,7 @@ def get_song_seg(songdata):
     return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
 
 def s_to_ms(n):
-    return round(n * 1000)
+    return round(round(n * 1000) / 10) * 10
 
 def each_beat_takes_seconds(bpm):
     return 60 / bpm
