@@ -63,7 +63,7 @@ def shuffle_beats(songdata):
             seg = origin_aud[start_seek:seek]
             seg = seg.apply_gain(-seg.max_dBFS).remove_dc_offset()
             segs.append(seg)
-            rest_ms = rest_ms - len(seg)
+            rest_ms = rest_ms - len(seg) - 1
             print(str(beat) + ": " + "%d:%d, remainder %d" % (start_seek, seek, rest_ms))
         segs = arrange_like(segs, pat)
         for part in segs:
