@@ -50,17 +50,18 @@ def shuffle_beats(songdata):
         buf = buf[:-s_to_ms(songdata["end"])]
     supposed_len = len(buf)
 
+    tot = 0
     while len(buf) > 0:
+        tot = tot + 1
         segs = []
         for beat in range(BEATS):
             cutoff = slicing_portion
             seg = buf[:cutoff]
             buf = buf[cutoff:]
-            segs.append(chaos(seg))
+            segs.append(seg)
         segs = arrange_like(segs, pat)
         for part in segs:
-            new_aud = new_aud.append(chaos(part), crossfade=0)
-        pat = get_random_beat_pattern()
+            new_aud = new_aud.append((tot % (BEATS / 4) == 0 and chaos(part) or part), crossfade=0)
 
     new_aud = chaos(new_aud)
 
