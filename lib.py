@@ -3,9 +3,9 @@ import random
 import math
 import sys
 
-BEATS = [4]
+BEATS = 4
 
-def get_random_beat_pattern(beats=BEATS[0]):
+def get_random_beat_pattern(beats=BEATS):
     #r = list(range(beats))
     #random.shuffle(r)
     #return r
@@ -19,7 +19,7 @@ def get_song_seg(songdata):
 def s_to_ms(n):
     return math.floor(n * 1000)
 
-def each_beat_takes_seconds(bpm, beats=BEATS[0]):
+def each_beat_takes_seconds(bpm, beats=BEATS):
     return round(60 / bpm / (beats / 4) * 1000) / 1000
 
 def arrange_like(origin, example):
@@ -36,7 +36,7 @@ def russian_roulette(s=None):
 def chaos(seg):
     return seg
 
-def _shuffle_beats(songdata, songseg, beats=BEATS[0]):
+def _shuffle_beats(songdata, songseg, beats=BEATS):
     buf = songseg
     new_aud = pydub.AudioSegment.empty()
 
@@ -67,7 +67,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS[0]):
 
 def shuffle_beats(songdata):
     songseg = get_song_seg(songdata)
-    songseg = _shuffle_beats(songdata, songseg, beats=BEATS[0])
+    songseg = _shuffle_beats(songdata, songseg, beats=BEATS)
     return songseg
 
 def make_lemonade(songdata):
