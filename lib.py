@@ -20,9 +20,9 @@ def get_song_seg(songdata):
     return r
 
 def s_to_ms(n):
-    return math.ceil(n * 1000)
+    return n * 1000
 
-def each_beat_takes_seconds(bpm, beats=BEATS):
+def each_beat_takes_seconds(bpm):
     return 60 / bpm
 
 def arrange_like(origin, example):
@@ -51,7 +51,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
  
     pat = get_random_beat_pattern(beats=beats)
     assert(len(pat) == beats)
-    slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"], beats=beats))# - 1
+    slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))# - 1
 
     while len(buf) > 0:
         segs = []
