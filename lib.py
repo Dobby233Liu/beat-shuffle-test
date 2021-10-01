@@ -72,7 +72,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
 
 def shuffle_beats(songdata):
     songseg = get_song_seg(songdata)
-    songseg = _shuffle_beats(songdata, songseg, beats=BEATS)
+    songseg = _shuffle_beats(songdata, songseg, beats=songdata.get("beats", BEATS))
     return songseg
 
 def shuffle_beats_and_export(songdata):
