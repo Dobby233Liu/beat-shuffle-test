@@ -68,7 +68,9 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             crossfade = 0
         new_aud = new_aud.append(_temp_endbuf, crossfade=crossfade)
 
-    return normalize(new_aud)
+    new_aud = normalize(new_aud)
+
+    assert(len(new_aud) == len(songseg))
 
 def shuffle_beats(songdata):
     songseg = get_song_seg(songdata)
