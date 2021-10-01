@@ -47,7 +47,7 @@ def shuffle_beats(songdata):
         segs = []
         for beat in range(BEATS):
             cutoff = slicing_portion
-            if cutoff > (len(buf)-1):
+            if cutoff >= (len(buf)-1):
                 cutoff = (len(buf)-1)
                 print(str(beat) + ": " + "REMAINDER FAILSAFE")
             seg = buf[:cutoff]
