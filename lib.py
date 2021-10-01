@@ -21,8 +21,8 @@ def each_beat_takes_seconds(bpm):
     return 60 / bpm
 
 def arrange_like(origin, example):
-    if len(origin) != len(example):
-        raise Exception("no")
+    assert(len(origin) != len(example))
+
     ret = []
     for i in example:
         ret.append(origin[i])
@@ -66,6 +66,7 @@ def shuffle_beats(songdata):
             new_aud = new_aud.append(part, crossfade=0)
 
     new_aud = new_aud.apply_gain(-new_aud.max_dBFS).remove_dc_offset()
+    assert(len(new_aud) == len(origin_aud))
 
     return new_aud, [i + 1 for i in pat]
 
