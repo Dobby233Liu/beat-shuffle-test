@@ -12,6 +12,8 @@ def get_song_seg(songdata):
     return r
 
 def s_to_ms(n):
+    # As for now this seems to be a good choice.
+    # I'm battling this $4!7 during testing BIG SHOT
     return math.floor(n * 1000)
 
 def each_beat_takes_seconds(bpm):
