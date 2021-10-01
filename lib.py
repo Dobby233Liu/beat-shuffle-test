@@ -52,7 +52,7 @@ def shuffle_beats(songdata):
             start_seek = seek
             seek = seek + slicing_portion - 1
             if (seek - start_seek) > rest_ms:
-                seek = rest_ms
+                seek = seek + rest_ms
                 rest_ms = 0
                 print("failsafe")
             else:
