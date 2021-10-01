@@ -39,13 +39,15 @@ def normalize(seg):
 
 def _shuffle_beats(songdata, songseg, beats=BEATS):
     buf = songseg
+    _temp_endbuf = None
     new_aud = pydub.AudioSegment.empty()
 
     if "start" in songdata:
+        new_aud.append(normalize(buf[:s_to_ms(songdata["start"])]), crossfade=0)
         buf = buf[s_to_ms(songdata["start"]):]
     if "end" in songdata:
+        _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"]):0])
         buf = buf[:-s_to_ms(songdata["end"])]
-    supposed_len = len(buf)
  
     pat = get_random_beat_pattern(beats=beats)
     assert(len(pat) == beats)
@@ -67,6 +69,12 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             if (len(new_aud) < crossfade) or (len(real_part) < crossfade):
                 crossfade = 0
             new_aud = new_aud.append(real_part, crossfade=crossfade)
+
+    if _temp_endbuf is not None:
+        crossfade = CF_AMOUNT
+        if len(new_aud) < crossfade:
+            crossfade = 0
+        new_aud = new_aud.append(_temp_endbuf, crossfade=crossfade)
 
     return normalize(new_aud)
 
