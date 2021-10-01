@@ -4,6 +4,7 @@ import math
 import sys
 
 BEATS = 4
+CF_AMOUNT = 5
 
 def get_random_beat_pattern(beats=BEATS):
     # r = list(range(beats))
@@ -47,14 +48,14 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     supposed_len = len(buf)
  
     pat = get_random_beat_pattern(beats=beats)
-    slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"], beats=beats))# - 1
+    assert(len(pat) == beats)
+    slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"], beats=beats))# - 1
 
     while len(buf) > 0:
         segs = []
         for beat in range(beats):
-            cutoff = slicing_portion
-            seg = buf[:cutoff]
-            buf = buf[cutoff:]
+            seg = buf[:slice_portion]
+            buf = buf[slice_portion:]
             seg = normalize(seg)
             _mseg = seg.split_to_mono()
             segs.append([seg, _mseg[0].max_dBFS, _mseg[1].max_dBFS])
@@ -62,8 +63,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         segs = arrange_like(segs, pat)
         for part in range(len(segs)):
             real_part = segs[part][0].apply_gain_stereo(-_old_segs[part][1], -_old_segs[part][2])
-            crossfade = 5
-            if (len(new_aud) < 5) or (len(real_part) < 5):
+            crossfade = CF_AMOUNT
+            if (len(new_aud) < crossfade) or (len(real_part) < crossfade):
                 crossfade = 0
             new_aud = new_aud.append(real_part, crossfade=crossfade)
 
