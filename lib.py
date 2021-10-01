@@ -61,7 +61,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             segs.append([seg, _mseg[0].max_dBFS, _mseg[1].max_dBFS])
         _old_segs = segs
         segs = arrange_like(segs, pat)
-        for part in range(segs):
+        for part in range(len(segs)):
             real_part = segs[part][0].apply_gain_stereo(-_old_segs[part][1], -_old_segs[part][2])
             new_aud = new_aud.append(real_part, crossfade=((len(new_aud) == 0 or len(part) == 0) and 0 or 5))
 
@@ -72,7 +72,7 @@ def shuffle_beats(songdata):
     songseg = _shuffle_beats(songdata, songseg, beats=BEATS)
     return songseg
 
-def make_lemonade(songdata):
+def shuffle_beats_and_export(songdata):
     out = shuffle_beats(songdata)
     fn = "shuffled_" + songdata["fn"]
     out.export(fn, format=songdata["ff"])
