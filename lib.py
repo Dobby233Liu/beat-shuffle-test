@@ -44,14 +44,14 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     if "new_order" in songdata:
         pat = songdata["new_order"]
     assert(len(pat) == beats)
-    slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"])) - 1
+    slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
     if "beat_delay" in songdata:
         slice_portion = slice_portion + s_to_ms(songdata["beat_delay"])
 
     while len(buf) > 0:
         segs = []
         for beat in range(beats):
-            seg = buf[:slice_portion]
+            seg = buf[:slice_portion+1]
             buf = buf[slice_portion:]
             seg = normalize(seg)
             segs.append(seg)
