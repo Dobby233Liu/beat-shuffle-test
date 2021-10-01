@@ -21,7 +21,7 @@ def each_beat_takes_seconds(bpm):
     return 60 / bpm
 
 def arrange_like(origin, example):
-    assert(len(origin) != len(example))
+    assert(len(origin) == len(example))
 
     ret = []
     for i in example:
