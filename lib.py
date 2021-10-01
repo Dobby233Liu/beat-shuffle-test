@@ -71,7 +71,7 @@ def shuffle_beats(songdata):
     beats = BEATS
     while beats != 1:
         songseg = _shuffle_beats(songdata, songseg, beats=beats)
-        beats = beats / 4
+        beats = beats / (4 / 2)
     return songseg
 
 def make_lemonade(songdata):
