@@ -63,7 +63,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         segs = arrange_like(segs, pat)
         for part in range(len(segs)):
             real_part = segs[part][0].apply_gain_stereo(-_old_segs[part][1], -_old_segs[part][2])
-            new_aud = new_aud.append(real_part, crossfade=((len(new_aud) == 0 or len(part) == 0) and 0 or 5))
+            new_aud = new_aud.append(real_part, crossfade=((len(new_aud) == 0 or len(real_part) == 0) and 0 or 5))
 
     return normalize(new_aud)
 
