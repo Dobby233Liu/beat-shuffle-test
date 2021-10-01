@@ -39,13 +39,13 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     if "end" in songdata:
         _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"]):0])
         buf = buf[:-s_to_ms(songdata["end"])]
-    supposed_len = len(buf)
+    #supposed_len = len(buf)
  
     pat = [0, 3, 2, 1] # 1,4,3,2
     if "new_order" in songdata:
         pat = songdata["new_order"]
     assert(len(pat) == beats)
-    slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"])) + 1
+    slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
     if "beat_delay" in songdata:
         slice_portion = slice_portion + s_to_ms(songdata["beat_delay"])
 
@@ -69,7 +69,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             crossfade = 0
         new_aud = new_aud.append(_temp_endbuf, crossfade=crossfade)
 
-    assert(len(new_aud) == supposed_len)
+    # Crossfade?
+    #assert(len(new_aud) == supposed_len)
     new_aud = normalize(new_aud)
 
     return new_aud
