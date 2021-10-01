@@ -42,9 +42,9 @@ def chaos(seg):
     if russian_roulette(24):
         seg = seg.compress_dynamic_range(random.uniform(-20, 0), random.uniform(1, 4))
     if russian_roulette(28):
-        seg = seg.low_pass_filter(random.uniform(-20, 20))
+        seg = seg.low_pass_filter(random.randint(-20, 20))
     if russian_roulette(30):
-        seg = seg.high_pass_filter(random.uniform(-20, 20))
+        seg = seg.high_pass_filter(random.randint(-20, 20))
     if russian_roulette(32):
         seg = seg.pan(random.uniform(-1, 1))
     if russian_roulette(34):
