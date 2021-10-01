@@ -3,11 +3,14 @@ import random
 import math
 import sys
 
-BEATS = [32,16,8,4,2,1]
+BEATS = [4]
 
 def get_random_beat_pattern(beats=BEATS[0]):
-    r = list(range(beats))
-    random.shuffle(r)
+    #r = list(range(beats))
+    #random.shuffle(r)
+    #return r
+    r = [1,4,3,2]
+    r = [i - 1 for i in r]
     return r
 
 def get_song_seg(songdata):
@@ -28,42 +31,10 @@ def arrange_like(origin, example):
 
     return ret
 
-def russian_roulette(s=6):
-    return random.randint(1, s) == (s / 2 + 1 * 2)
+def russian_roulette(s=None):
+    return False
 def chaos(seg):
-    if russian_roulette(6):
-        seg = seg.reverse()
-    if russian_roulette(8):
-        samples = seg.get_array_of_samples()
-        if len(samples) > 0:
-            r = random.randrange(0, len(samples), 2)
-            samples[r] = random.randint(0,127)
-            samples[r + 1] = random.randint(0,127)
-            seg = seg._spawn(samples)
-    if russian_roulette(12):
-        samples = seg.get_array_of_samples()
-        if len(samples) > 0:
-            r = random.randrange(0, len(samples), 2)
-            samples.pop(r)
-            samples.pop(r)
-            seg = seg._spawn(samples)
-    if russian_roulette(24):
-        seg = seg.compress_dynamic_range(random.uniform(-10, -2), random.uniform(1, 4))
-    if russian_roulette(28):
-        seg = seg.low_pass_filter(random.randint(8, 20))
-    if russian_roulette(30):
-        seg = seg.high_pass_filter(random.randint(8, 20))
-    if russian_roulette(32):
-        seg = seg.pan(random.uniform(-1, 1))
-    if russian_roulette(34):
-        seg = seg.apply_gain(random.uniform(-2, 8))
-    if russian_roulette(36):
-        seg = seg.apply_gain_stereo(random.uniform(-2, 8), random.uniform(-2, 8))
-    if russian_roulette(100):
-        samples = seg.get_array_of_samples()
-        random.shuffle(samples)
-        seg = seg._spawn(samples)
-    return seg.normalize()
+    return seg
 
 def _shuffle_beats(songdata, songseg, beats=BEATS[0]):
     buf = songseg
