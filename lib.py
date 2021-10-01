@@ -3,7 +3,7 @@ import random
 import math
 import sys
 
-BEATS = 128
+BEATS = 32
 assert(BEATS % 4 == 0)
 
 def get_random_beat_pattern():
