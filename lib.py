@@ -1,5 +1,6 @@
 import pydub
 import random
+import math
 import sys
 
 BEATS = 4
@@ -14,7 +15,7 @@ def get_song_seg(songdata):
     return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
 
 def s_to_ms(n):
-    return floor(n * 1000)
+    return math.floor(n * 1000)
 
 def each_beat_takes_seconds(bpm):
     return 60 / bpm
