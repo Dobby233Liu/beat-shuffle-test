@@ -6,13 +6,6 @@ import sys
 BEATS = 4
 CF_AMOUNT = 10
 
-def get_random_beat_pattern(beats=BEATS):
-    # r = list(range(beats))
-    # random.shuffle(r)
-    # return r
-    r = [0, 3, 2, 1] # 1, 4, 3, 2
-    return r
-
 def get_song_seg(songdata):
     r = pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
     if r.channels == 1:
@@ -49,9 +42,13 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"]):0])
         buf = buf[:-s_to_ms(songdata["end"])]
  
-    pat = get_random_beat_pattern(beats=beats)
+    pat = [0, 3, 2, 1] # 1,4,3,2
+    if "new_order" in songdata:
+        pat = songdata["new_order"]
     assert(len(pat) == beats)
     slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))# - 1
+    if "beat_delay" in songdata:
+        slice_portion = slice_portion + s_to_ms(songdata["beat_delay"])
 
     while len(buf) > 0:
         segs = []
