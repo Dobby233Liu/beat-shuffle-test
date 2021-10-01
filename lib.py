@@ -60,8 +60,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             segs.append(seg)
         segs = arrange_like(segs, pat)
         for part in segs:
-            new_aud = new_aud.append(part, crossfade=5)
-        pat = get_random_beat_pattern(beats=beats)
+            new_aud = new_aud.append(part, crossfade=(len(new_aud) == 0 and 0 or 5))
 
     return new_aud
 
