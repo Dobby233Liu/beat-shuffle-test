@@ -14,7 +14,7 @@ def get_song_seg(songdata):
     return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
 
 def s_to_ms(n):
-    return n * 1000
+    return round(n * 1000)
 
 def each_beat_takes_seconds(bpm):
     return 60 / bpm
@@ -33,6 +33,7 @@ def shuffle_beats(songdata):
 
     pat = get_random_beat_pattern()
     slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
+    print(slicing_portion)
     #if len(origin_aud) % slicing_portion != 0: # add padding
     #    origin_aud = origin_aud + pydub.AudioSegment.silent(duration=(slicing_portion - (len(origin_aud) % slicing_portion)))
     rest_ms = len(origin_aud)
