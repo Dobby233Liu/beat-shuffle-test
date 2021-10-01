@@ -56,16 +56,14 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             seg = buf[:slice_portion]
             buf = buf[slice_portion:]
             seg = normalize(seg)
-            _mseg = seg.split_to_mono()
-            segs.append([seg, _mseg[0].max_dBFS, _mseg[1].max_dBFS])
+            segs.append(seg)
         _old_segs = segs
         segs = arrange_like(segs, pat)
-        for part in range(len(segs)):
-            real_part = normalize(segs[part][0].apply_gain_stereo(-_old_segs[part][1], -_old_segs[part][2]))
+        for part in segs:
             crossfade = CF_AMOUNT
-            if (len(new_aud) < crossfade) or (len(real_part) < crossfade):
+            if (len(new_aud) < crossfade) or (len(part) < crossfade):
                 crossfade = 0
-            new_aud = new_aud.append(real_part, crossfade=crossfade)
+            new_aud = new_aud.append(part, crossfade=crossfade)
 
     if _temp_endbuf is not None:
         crossfade = CF_AMOUNT
