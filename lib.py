@@ -1,7 +1,6 @@
 import pydub
 import random
 import math
-import sys
 
 BEATS = 4
 CF_AMOUNT = 10
@@ -13,10 +12,10 @@ def get_song_seg(songdata):
     return r
 
 def s_to_ms(n):
-    return n * 1000
+    return math.ceil(n * 1000)
 
 def each_beat_takes_seconds(bpm):
-    return math.ceil(60 / bpm)
+    return 60 / bpm
 
 def arrange_like(origin, example):
     assert(len(origin) == len(example))
@@ -57,7 +56,6 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             buf = buf[slice_portion:]
             seg = normalize(seg)
             segs.append(seg)
-        _old_segs = segs
         segs = arrange_like(segs, pat)
         for part in segs:
             crossfade = CF_AMOUNT
