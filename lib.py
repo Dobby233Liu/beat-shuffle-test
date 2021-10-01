@@ -39,6 +39,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     if "end" in songdata:
         _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"]):0])
         buf = buf[:-s_to_ms(songdata["end"])]
+    supposed_len = len(buf)
  
     pat = [0, 3, 2, 1] # 1,4,3,2
     if "new_order" in songdata:
@@ -51,8 +52,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     while len(buf) > 0:
         segs = []
         for beat in range(beats):
-            seg = buf[:slice_portion+1]
-            buf = buf[slice_portion:]
+            seg = buf[:slice_portion]
+            buf = buf[slice_portion+1:]
             seg = normalize(seg)
             segs.append(seg)
         segs = arrange_like(segs, pat)
@@ -70,7 +71,9 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
 
     new_aud = normalize(new_aud)
 
-    assert(len(new_aud) == len(songseg))
+    assert(len(new_aud) == supposed_len)
+
+    return new_aud
 
 def shuffle_beats(songdata):
     songseg = get_song_seg(songdata)
