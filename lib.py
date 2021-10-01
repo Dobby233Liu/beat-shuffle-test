@@ -58,7 +58,8 @@ def shuffle_beats(songdata):
                 segs.append(pydub.AudioSegment.empty())
                 continue
             elif (seek - start_seek) > rest_ms:
-                seek = start_seek + rest_ms - 1
+                seek = start_seek + rest_ms
+                assert(seek == len(origin_aud) - 1)
                 print(str(beat) + ": " + "REMAINDER FAILSAFE")
             rest_ms = rest_ms - (seek - start_seek + 1)
             print(str(beat) + ": " + "%d:%d, remainder %d" % (start_seek, seek, rest_ms))
