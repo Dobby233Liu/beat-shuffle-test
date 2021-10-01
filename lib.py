@@ -36,14 +36,14 @@ def chaos(seg):
     if russian_roulette(8):
         samples = seg.get_array_of_samples()
         if len(samples) > 0:
-            r = random.randrange(len(samples), 2)
+            r = random.randrange(0, len(samples), 2)
             samples[r] = random.randint(0,127)
             samples[r + 1] = random.randint(0,127)
             seg = seg._spawn(samples)
     if russian_roulette(12):
         samples = seg.get_array_of_samples()
         if len(samples) > 0:
-            r = random.randrange(len(samples), 2)
+            r = random.randrange(0, len(samples), 2)
             samples.pop(r)
             samples.pop(r)
             seg = seg._spawn(samples)
