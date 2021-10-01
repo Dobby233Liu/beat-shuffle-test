@@ -1,6 +1,5 @@
 import pydub
 import random
-import math
 
 BEATS = 4
 CF_AMOUNT = 10
@@ -12,7 +11,7 @@ def get_song_seg(songdata):
     return r
 
 def s_to_ms(n):
-    return math.floor(n * 1000)
+    return round(n * 1000)
 
 def each_beat_takes_seconds(bpm):
     return 60 / bpm
