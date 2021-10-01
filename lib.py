@@ -6,11 +6,10 @@ import sys
 BEATS = 4
 
 def get_random_beat_pattern(beats=BEATS):
-    #r = list(range(beats))
-    #random.shuffle(r)
-    #return r
-    r = [1,4,3,2]
-    r = [i - 1 for i in r]
+    # r = list(range(beats))
+    # random.shuffle(r)
+    # return r
+    r = [0, 3, 2, 1] # 1, 4, 3, 2
     return r
 
 def get_song_seg(songdata):
@@ -20,10 +19,10 @@ def get_song_seg(songdata):
     return r
 
 def s_to_ms(n):
-    return math.floor(n * 1000)
+    return math.ceil(n * 1000)
 
 def each_beat_takes_seconds(bpm, beats=BEATS):
-    return round(60 / bpm / (beats / 4) * 1000) / 1000
+    return 60 / bpm
 
 def arrange_like(origin, example):
     assert(len(origin) == len(example))
