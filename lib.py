@@ -14,7 +14,7 @@ def get_song_seg(songdata):
     return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
 
 def s_to_ms(n):
-    return round(n * 1000)
+    return floor(n * 1000)
 
 def each_beat_takes_seconds(bpm):
     return 60 / bpm
@@ -62,7 +62,7 @@ def shuffle_beats(songdata):
             segs.append(seg)
         segs = arrange_like(segs, pat)
         for seg in segs:
-            new_aud = new_aud + seg
+            new_aud.append(seg, crossfade=0)
 
     new_aud = new_aud.apply_gain(-new_aud.max_dBFS)
 
