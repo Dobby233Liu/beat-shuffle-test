@@ -1,23 +1,23 @@
 import pydub
 import random
+import math
 import sys
 
-BEATS = 4
+BEATS = 16
 
 def get_random_beat_pattern():
-    #ret = list(range(BEATS))
-    #random.shuffle(ret)
-    #return ret
-    return [i - 1 for i in [1, 4, 3, 2]] # Guaranteed random with [[Hyperlink Blocked]]
+    ret = list(range(BEATS))
+    random.shuffle(ret)
+    return ret
 
 def get_song_seg(songdata):
     return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
 
 def s_to_ms(n):
-    return round(n * 1000)
+    return math.floor(n * 1000)
 
 def each_beat_takes_seconds(bpm):
-    return 60 / bpm
+    return round(60 / bpm / (BEATS / 4) * 1000) / 1000
 
 def arrange_like(origin, example):
     assert(len(origin) == len(example))
