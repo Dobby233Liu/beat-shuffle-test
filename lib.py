@@ -51,8 +51,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     while len(buf) > 0:
         segs = []
         for beat in range(beats):
-            seg = buf[:slice_portion-1]
-            buf = buf[slice_portion:]
+            seg = buf[:slice_portion]
+            buf = buf[slice_portion-1:]
             seg = normalize(seg)
             segs.append(seg)
         segs = arrange_like(segs, pat)
