@@ -23,7 +23,7 @@ def s_to_ms(n):
     return n * 1000
 
 def each_beat_takes_seconds(bpm):
-    return 60 / bpm
+    return math.ceil(60 / bpm)
 
 def arrange_like(origin, example):
     assert(len(origin) == len(example))
@@ -64,7 +64,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         _old_segs = segs
         segs = arrange_like(segs, pat)
         for part in range(len(segs)):
-            real_part = segs[part][0].apply_gain_stereo(-_old_segs[part][1], -_old_segs[part][2])
+            real_part = normalize(segs[part][0].apply_gain_stereo(-_old_segs[part][1], -_old_segs[part][2]))
             crossfade = CF_AMOUNT
             if (len(new_aud) < crossfade) or (len(real_part) < crossfade):
                 crossfade = 0
