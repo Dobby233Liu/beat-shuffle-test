@@ -14,7 +14,9 @@ def get_random_beat_pattern(beats=BEATS):
     return r
 
 def get_song_seg(songdata):
-    return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
+    r = pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
+    r = pydub.AudioSegment.from_mono_audiosegments(r, r)
+    return r
 
 def s_to_ms(n):
     return math.floor(n * 1000)
