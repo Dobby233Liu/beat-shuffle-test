@@ -1,9 +1,9 @@
 song = {}
 
-song["fn"] = "cyber.ogg"
+song["fn"] = "spamton_neo_mix_ex_wip.ogg" # BIG SHOT
 song["ff"] = "ogg"
 
-song["bpm"] = 115
+song["bpm"] = 140 # beat per minute
 
 song["new_order"] = [1, 0, 3, 2] # off by one
-song["beat_delay"] = 1/48
+song["beat_delay"] = 0 # in seconds
