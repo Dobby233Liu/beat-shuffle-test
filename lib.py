@@ -53,18 +53,18 @@ def shuffle_beats(songdata):
         for beat in range(BEATS):
             start_seek = seek
             seek = seek + slicing_portion
-            if (seek - start_seek) > rest_ms:
-                seek = len(origin_aud) - 1
-                print(str(beat) + ": " + "REMAINDER FAILSAFE, seek set to %d" % seek)
-            rest_ms = rest_ms - (seek - start_seek + 1)
             if (seek - start_seek) == 0:
                 print(str(beat) + ": " + "appending nothing")
                 segs.append(pydub.AudioSegment.empty())
                 continue
-            print(str(beat) + ": " + "%d:%d, remainder %d" % (start_seek, seek, rest_ms))
+            if (seek - start_seek) > rest_ms:
+                seek = len(origin_aud) - 1
+                print(str(beat) + ": " + "REMAINDER FAILSAFE, seek set to %d" % seek)
             seg = origin_aud[start_seek:seek]
             seg = seg.apply_gain(-seg.max_dBFS).remove_dc_offset()
             segs.append(seg)
+            rest_ms = rest_ms - len(seg)
+            print(str(beat) + ": " + "%d:%d, remainder %d" % (start_seek, seek, rest_ms))
         segs = arrange_like(segs, pat)
         for part in segs:
             new_aud = new_aud.append(part, crossfade=0)
