@@ -1,6 +1,5 @@
 import pydub
 import random
-import math
 import sys
 
 BEATS = 4
@@ -15,7 +14,7 @@ def get_song_seg(songdata):
     return pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
 
 def s_to_ms(n):
-    return math.floor(n * 1000)
+    return round(n * 1000)
 
 def each_beat_takes_seconds(bpm):
     return 60 / bpm
@@ -26,6 +25,7 @@ def arrange_like(origin, example):
     ret = []
     for i in example:
         ret.append(origin[i])
+
     return ret
 
 def shuffle_beats(songdata):
@@ -36,8 +36,10 @@ def shuffle_beats(songdata):
     slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
     print(pat)
     print(slicing_portion)
+
     #if len(origin_aud) % slicing_portion != 0: # add padding
     #    origin_aud = origin_aud + pydub.AudioSegment.silent(duration=(slicing_portion - (len(origin_aud) % slicing_portion)))
+
     rest_ms = len(origin_aud)
     seek = 0
     if "start" in songdata:
