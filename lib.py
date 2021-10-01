@@ -59,6 +59,9 @@ def shuffle_beats(songdata):
                 print("FAILSAFE")
             else:
                 rest_ms = rest_ms - (seek - start_seek + 1)
+            if (seek - start_seek) == 0:
+                segs.append(pydub.AudioSegment.empty())
+                continue
             print(str(beat) + ": " + "%d:%d, remainder %d" % (start_seek, seek, rest_ms))
             seg = origin_aud[start_seek:seek]
             seg = seg.apply_gain(-seg.max_dBFS).remove_dc_offset()
