@@ -41,6 +41,9 @@ def shuffle_beats(songdata):
     seek = 0
     if "start" in songdata:
         seek = s_to_ms(songdata["start"])
+        rest_ms = rest_ms - seek
+    if "end" in songdata:
+        rest_ms = rest_ms - s_to_ms(songdata["end"])
 
     while rest_ms > 0:
         segs = []
