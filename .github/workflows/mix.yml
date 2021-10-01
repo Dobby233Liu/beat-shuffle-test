@@ -17,11 +17,9 @@ jobs:
         pip install pydub
         sudo apt-get install ffmpeg
     - name: Less go
-      id: gen
-      run: |
-        echo "::set-output name=fn::$(python main.py)"
+      run: python main.py
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
-        name: ${{steps.gen.outputs.fn}}
-        path: ${{steps.gen.outputs.fn}}
+        name: shuf
+        path: shuffled_*
