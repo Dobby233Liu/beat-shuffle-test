@@ -46,6 +46,8 @@ def shuffle_beats(songdata):
     while len(buf) > 0:
         segs = []
         for beat in range(BEATS):
+            if len(buf) <= 0:
+                break
             cutoff = slicing_portion
             if cutoff >= (len(buf)-1):
                 cutoff = (len(buf)-1)
