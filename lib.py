@@ -35,22 +35,24 @@ def chaos(seg):
         seg = seg.reverse()
     if russian_roulette(8):
         seg = seg.invert_phase()
-    if russian_roulette(12):
-        try:
-            seg = seg.speedup(playback_speed=random.uniform(0.5, 1.5), crossfade=0)
-        except: pass
+    #if russian_roulette(12):
+    #    seg = seg.speedup(playback_speed=random.uniform(0.5, 1.5), crossfade=0)
     if russian_roulette(24):
         seg = seg.compress_dynamic_range(random.uniform(-20, 0), random.uniform(1, 4))
     if russian_roulette(28):
-        seg = seg.low_pass_filter(random.randint(-20, 20))
+        seg = seg.low_pass_filter(random.randint(8, 20))
     if russian_roulette(30):
-        seg = seg.high_pass_filter(random.randint(-20, 20))
+        seg = seg.high_pass_filter(random.randint(8, 20))
     if russian_roulette(32):
         seg = seg.pan(random.uniform(-1, 1))
     if russian_roulette(34):
         seg = seg.apply_gain(random.uniform(-8, 8))
     if russian_roulette(36):
         seg = seg.apply_gain_stereo(random.uniform(-8, 8), random.uniform(-8, 8))
+    if russian_roulette(100):
+        samples = seg.get_array_of_samples()
+        random.shuffle(samples)
+        seg = seg._spawn(samples)
     return seg.normalize()
 
 def _shuffle_beats(songdata, songseg, beats=BEATS[0]):
