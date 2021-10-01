@@ -53,10 +53,13 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             cutoff = slicing_portion
             seg = buf[:cutoff]
             buf = buf[cutoff:]
-            segs.append(normalize(seg))
+            seg = normalize(seg)
+            segs.append([seg, seg.max_dBFS])
+        _old_segs = segs
         segs = arrange_like(segs, pat)
-        for part in segs:
-            new_aud = new_aud.append(part, crossfade=((len(new_aud) == 0 or len(part) == 0) and 0 or 5))
+        for part in range(segs):
+            real_part = segs[part][0].apply_gain(-_old_segs[part][1])
+            new_aud = new_aud.append(real_part, crossfade=((len(new_aud) == 0 or len(part) == 0) and 0 or 5))
 
     return normalize(new_aud)
 
