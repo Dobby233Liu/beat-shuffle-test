@@ -29,7 +29,7 @@ def arrange_like(origin, example):
     return ret
 
 def shuffle_beats(songdata):
-    origin_aud = get_song_seg(songdata)
+    buf = get_song_seg(songdata)
     new_aud = pydub.AudioSegment.empty()
 
     pat = get_random_beat_pattern()
@@ -37,45 +37,29 @@ def shuffle_beats(songdata):
     print(pat)
     print(slicing_portion)
 
-    #if len(origin_aud) % slicing_portion != 0: # add padding
-    #    origin_aud = origin_aud + pydub.AudioSegment.silent(duration=(slicing_portion - (len(origin_aud) % slicing_portion)))
-
-    supposed_len = len(origin_aud)
-    seek = 0
     if "start" in songdata:
-        seek = s_to_ms(songdata["start"])
-        supposed_len = supposed_len - seek
+        buf = buf[s_to_ms(songdata["start"]):]
     if "end" in songdata:
-        supposed_len = supposed_len - s_to_ms(songdata["end"])
-    filler = False
+        buf = buf[:-s_to_ms(songdata["end"])]
+    supposed_len = len(buf)
 
-    while len(new_aud) < supposed_len:
+    while len(buf) > 0:
         segs = []
         for beat in range(BEATS):
-            start_seek = seek
-            seek = seek + slicing_portion
-            if (seek - start_seek) <= 0 or filler or start_seek >= (supposed_len - 1):
-                print(str(beat) + ": " + "appending nothing")
-                segs.append(pydub.AudioSegment.empty())
-                filler = True
-                if len(segs) < 4:
-                    continue
-                else:
-                    break
-            if seek >= (supposed_len - 1):
-                seek = supposed_len - 1
-                print(str(beat) + ": " + "REMAINDER FAILSAFE, seek set to %d" % seek)
-                filler = True
-            assert(not (seek < 0 or seek < start_seek))
-            seg = origin_aud[start_seek:seek]
+            cutoff = slicing_portion
+            if cutoff > (len(buf)-1):
+                cutoff = (len(buf)-1)
+                print(str(beat) + ": " + "REMAINDER FAILSAFE")
+            seg = buf[:cutoff]
+            buf = buf[cutoff:]
             seg = seg.apply_gain(-seg.max_dBFS).remove_dc_offset()
             segs.append(seg)
-            print(str(beat) + ": " + "%d:%d" % (start_seek, seek))
         segs = arrange_like(segs, pat)
         for part in segs:
             new_aud = new_aud.append(part, crossfade=0)
 
     new_aud = new_aud.apply_gain(-new_aud.max_dBFS).remove_dc_offset()
+    assert(len(new_aud) == supposed_len)
 
     return new_aud, [i + 1 for i in pat]
 
