@@ -57,6 +57,8 @@ def shuffle_beats(songdata):
         for seg in segs:
             new_aud = new_aud + seg
 
+    new_aud = new_aud.apply_gain(-new_aud.max_dBFS)
+
     return new_aud, [i + 1 for i in pat]
 
 def make_lemonade(songdata):
