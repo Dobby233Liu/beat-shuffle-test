@@ -35,8 +35,12 @@ def chaos(seg):
         seg = seg.reverse()
     if russian_roulette(8):
         seg = seg.invert_phase()
-    #if russian_roulette(12):
-    #    seg = seg.speedup(playback_speed=random.uniform(0.5, 1.5), crossfade=0)
+    if russian_roulette(12):
+        samples = seg.get_array_of_samples()
+        r = random.randrange(0, 2, len(samples))
+        samples.pop(r)
+        samples.pop(r + 1)
+        seg = seg._spawn(samples)
     if russian_roulette(24):
         seg = seg.compress_dynamic_range(random.uniform(-20, 0), random.uniform(1, 4))
     if russian_roulette(28):
