@@ -46,14 +46,11 @@ def shuffle_beats(songdata):
     while len(buf) > 0:
         segs = []
         for beat in range(BEATS):
-            if len(buf) <= 0:
-                break
             cutoff = slicing_portion
             seg = buf[:cutoff]
             buf = buf[cutoff:]
             seg = seg.apply_gain(-seg.max_dBFS).remove_dc_offset()
             segs.append(seg)
-        assert(len(segs) == BEATS)
         segs = arrange_like(segs, pat)
         for part in segs:
             new_aud = new_aud.append(part, crossfade=0)
