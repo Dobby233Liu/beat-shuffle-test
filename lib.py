@@ -47,7 +47,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS[0]):
     supposed_len = len(buf)
  
     pat = get_random_beat_pattern(beats=beats)
-    slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"], beats=beats))
+    slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"], beats=beats)) - 1
 
     tot = 0
     while len(buf) > 0:
@@ -60,16 +60,14 @@ def _shuffle_beats(songdata, songseg, beats=BEATS[0]):
             segs.append(seg)
         segs = arrange_like(segs, pat)
         for part in segs:
-            new_aud = new_aud.append((tot % (beats / 4) == 0 and chaos(part) or part), crossfade=0)
+            new_aud = new_aud.append(part, crossfade=5)
         pat = get_random_beat_pattern(beats=beats)
 
-    new_aud = chaos(new_aud)
-
     return new_aud
+
 def shuffle_beats(songdata):
     songseg = get_song_seg(songdata)
-    for beats in BEATS:
-        songseg = _shuffle_beats(songdata, songseg, beats=beats)
+    songseg = _shuffle_beats(songdata, songseg, beats=BEATS[0])
     return songseg
 
 def make_lemonade(songdata):
