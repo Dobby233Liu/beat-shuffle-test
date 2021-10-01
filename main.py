@@ -1,4 +1,4 @@
-from lib import make_lemonade
+from lib import shuffle_beats_and_export
 import a_cybers_world
 
-print(make_lemonade(a_cybers_world.song))
+print(shuffle_beats_and_export(a_cybers_world.song))
