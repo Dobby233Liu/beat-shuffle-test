@@ -31,10 +31,8 @@ def arrange_like(origin, example):
 
     return ret
 
-def russian_roulette(s=None):
-    return False
-def chaos(seg):
-    return seg
+def normalize(seg):
+    return seg.normalize().remove_dc_offset()
 
 def _shuffle_beats(songdata, songseg, beats=BEATS):
     buf = songseg
@@ -49,20 +47,18 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     pat = get_random_beat_pattern(beats=beats)
     slicing_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"], beats=beats)) - 1
 
-    tot = 0
     while len(buf) > 0:
-        tot = tot + 1
         segs = []
         for beat in range(beats):
             cutoff = slicing_portion
             seg = buf[:cutoff]
             buf = buf[cutoff:]
-            segs.append(seg)
+            segs.append(normalize(seg))
         segs = arrange_like(segs, pat)
         for part in segs:
-            new_aud = new_aud.append(part, crossfade=(len(new_aud) == 0 and 0 or 5))
+            new_aud = new_aud.append(part, crossfade=((len(new_aud) == 0 or len(part) == 0) and 0 or 5))
 
-    return new_aud
+    return normalize(new_aud)
 
 def shuffle_beats(songdata):
     songseg = get_song_seg(songdata)
