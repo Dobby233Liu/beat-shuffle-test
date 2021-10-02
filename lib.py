@@ -40,12 +40,15 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     _temp_endbuf = None
     new_aud = pydub.AudioSegment.empty()
 
+    if "rounding" in songdata:
+        rounding = songdata["rounding"]
+
     if "start" in songdata:
-        new_aud.append(normalize(buf[:s_to_ms(songdata["start"])]), crossfade=0)
-        buf = buf[s_to_ms(songdata["start"]):]
+        new_aud.append(normalize(buf[:s_to_ms(songdata["start"], rounding=rounding)]), crossfade=0)
+        buf = buf[s_to_ms(songdata["start"], rounding=rounding):]
     if "end" in songdata:
-        _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"]):0])
-        buf = buf[:-s_to_ms(songdata["end"])]
+        _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"], rounding=rounding):0])
+        buf = buf[:-s_to_ms(songdata["end"], rounding=rounding)]
 
     _back_pat_if_callable = None
     _call_pat_each_loop_end = False
@@ -60,9 +63,9 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             pat = pat[0]
     assert(len(pat) == beats)
 
-    slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
+    slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]), rounding=rounding)
     if "beat_delay" in songdata:
-        slice_portion = slice_portion + s_to_ms(songdata["beat_delay"])
+        slice_portion = slice_portion + s_to_ms(songdata["beat_delay"], rounding=rounding)
     cf_amount = CF_AMOUNT
     if "crossfade" in songdata:
         cf_amount = songdata["crossfade"]
