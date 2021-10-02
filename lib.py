@@ -46,7 +46,6 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     if "end" in songdata:
         _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"]):0])
         buf = buf[:-s_to_ms(songdata["end"])]
-    supposed_len = len(buf)
  
     pat = [1, 4, 3, 2]
     if "new_order" in songdata:
@@ -79,7 +78,6 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             crossfade = 0
         new_aud = new_aud.append(_temp_endbuf, crossfade=crossfade)
 
-    assert((cf_amount != 0) or (len(new_aud) == supposed_len))
     new_aud = normalize(new_aud)
 
     return new_aud
