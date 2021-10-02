@@ -68,7 +68,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             _call_pat_each_loop_end = pat[1]
             pat = pat[0]
     assert(len(pat) == beats)
-    print("Pattern is " + len(pat))
+    print("Pattern is " + str(pat))
 
     slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]), rounding=rounding)
     if "beat_delay" in songdata:
