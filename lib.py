@@ -40,8 +40,10 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     _temp_endbuf = None
     new_aud = pydub.AudioSegment.empty()
 
+    rounding = None # determined by function
     if "rounding" in songdata:
         rounding = songdata["rounding"]
+    assert(callable(rounding))
 
     if "start" in songdata:
         new_aud.append(normalize(buf[:s_to_ms(songdata["start"], rounding=rounding)]), crossfade=0)
