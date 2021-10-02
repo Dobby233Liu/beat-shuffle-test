@@ -78,20 +78,25 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         cf_amount = songdata["crossfade"]
     print("Crossfade uses " + "%dms" % cf_amount)
 
-    with tqdm():
+    with tqdm() as pbar:
         while len(buf) > 0:
             segs = []
-            for beat in trange(beats):
+            for beat in range(beats):
                 seg = buf[:slice_portion]
                 buf = buf[slice_portion:]
                 seg = normalize(seg)
                 segs.append(seg)
+                pbar.update(1/beats/2)
+                pbar.update_description("Progressing beat %d/%d" % (beat, beats))
             segs = arrange_like(segs, pat, placeholder=pydub.AudioSegment.empty())
-            for part in segs:
+            for parti in range(len(segs)):
+                part = segs[parti]
                 crossfade = cf_amount
                 if (len(new_aud) < crossfade) or (len(part) < crossfade):
                     crossfade = 0
                 new_aud = new_aud.append(part, crossfade=crossfade)
+                pbar.update(1/len(segs)/2)
+                pbar.update_description("Appending beat %d/%d of shuffled list" % (beat, beats))
             if _back_pat_if_callable is not None and callable(_back_pat_if_callable) and _call_pat_each_loop_end:
                 _old_pat = pat
                 pat = _back_pat_if_callable(tick)
