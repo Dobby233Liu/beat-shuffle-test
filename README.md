@@ -8,3 +8,6 @@ Swap beat 2 and 4 instantly
 2. Edit song.py
 3. Run main.py with Python 3.9
 4. Potassium
+
+## TODO
+* Make the *library* look and feel like a actual library
