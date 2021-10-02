@@ -1,4 +1,5 @@
 import random
+from tqdm.auto import tqdm
 
 song = {}
 
@@ -8,7 +9,11 @@ song["ff"] = "ogg"
 song["bpm"] = 140 # beat per minute
 
 def new_order(tick):
-    ord = [random.choice([1, 2, 3, 4, 0]) for _ in range(4)]
+    ord = [1, 2, 3, 4]
+    start = (tick % (len(ord) + 1))
+    ord = ord[start:0]
+    tqdm.write("start:%d ord:%s" % (start, str(ord)))
+    random.shuffle(ord)
     return ord, True
 
 song["new_order"] = new_order
