@@ -2,14 +2,14 @@ import random
 
 song = {}
 
-song["fn"] = "spamton_neo_mix_ex_wip.ogg" # BIG SHOT
+song["fn"] = "berdly_chase.ogg" # Smart Race
 song["ff"] = "ogg"
 
-song["bpm"] = 140 * 2 # beat per minute
-song["beats"] = 4 * 2 # fake beat number to split more segments
+song["bpm"] = 150 # beat per minute
 
-# Spamton had a stroke
 def new_order(tick):
-    return [random.randint(0, 8) for i in range(8)], True
+    ret = [1, 4, 3, 2]
+    if tick % 9 > 4:
+        ret = [3, 2, 1, 4]
+    return ret, True
 song["new_order"] = new_order
-song["crossfade"] = 5
