@@ -10,7 +10,7 @@ song["bpm"] = 140 # beat per minute
 def new_order(tick):
     ord = [1, 2, 3, 4]
     start = ((tick % len(ord)) + random.randint(0, len(ord))) % len(ord)
-    ord = ord[-start:0]
+    ord = ord[start:len(ord)-start]
 
     from tqdm.auto import tqdm
     tqdm.write("start:%d ord:%s" % (start, str(ord)))
