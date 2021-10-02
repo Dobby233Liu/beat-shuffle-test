@@ -46,10 +46,19 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     if "end" in songdata:
         _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"]):0])
         buf = buf[:-s_to_ms(songdata["end"])]
- 
+
+    _back_pat_if_callable = None
+    _call_pat_each_loop_end = False
     pat = [1, 4, 3, 2]
     if "new_order" in songdata:
         pat = songdata["new_order"]
+    if callable(pat):
+        _back_pat_if_callable = pat
+        pat = _back_pat_if_callable()
+        if type(pat) is tuple:
+            _call_pat_each_loop_end = pat[1]
+            pat = pat[0]
+
     assert(len(pat) == beats)
     slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
     if "beat_delay" in songdata:
@@ -71,6 +80,10 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             if (len(new_aud) < crossfade) or (len(part) < crossfade):
                 crossfade = 0
             new_aud = new_aud.append(part, crossfade=crossfade)
+        if _back_pat_if_callable is not None and callable(_back_pat_if_callable) and _call_pat_each_loop_end:
+            pat = _back_pat_if_callable()
+            if type(pat) is tuple:
+                pat = pat[0]
 
     if _temp_endbuf is not None:
         crossfade = cf_amount
