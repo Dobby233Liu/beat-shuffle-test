@@ -18,14 +18,14 @@ def s_to_ms(n, rounding=math.floor):
 def each_beat_takes_seconds(bpm):
     return 60 / bpm
 
-def arrange_like(origin, example):
+def arrange_like(origin, example, placeholder=None):
     assert(len(origin) == len(example))
 
     ret = []
     for i in example:
         ap = None
         if i <= 0 or i > len(origin):
-            ap = pydub.AudioSegment.empty()
+            ap = placeholder
         else:
             ap = origin[i - 1]
         ret.append(ap)
@@ -66,7 +66,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             buf = buf[slice_portion:]
             seg = normalize(seg)
             segs.append(seg)
-        segs = arrange_like(segs, pat)
+        segs = arrange_like(segs, pat, placeholder=pydub.AudioSegment.empty())
         for part in segs:
             crossfade = cf_amount
             if (len(new_aud) < crossfade) or (len(part) < crossfade):
