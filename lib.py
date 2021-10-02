@@ -1,6 +1,6 @@
 import pydub
 import math
-from tqdm.auto import tqdm
+from tqdm.auto import tqdm, trange
 
 BEATS = 4
 CF_AMOUNT = 10
