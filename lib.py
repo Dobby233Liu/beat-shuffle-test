@@ -2,7 +2,7 @@ import pydub
 import math
 
 BEATS = 4
-CF_AMOUNT = 10
+CF_AMOUNT = 0#10
 
 def get_song_seg(songdata):
     r = pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
@@ -33,7 +33,7 @@ def arrange_like(origin, example):
     return ret
 
 def normalize(seg):
-    return seg#.normalize()#.remove_dc_offset()
+    return seg.normalize().remove_dc_offset()
 
 def _shuffle_beats(songdata, songseg, beats=BEATS):
     buf = songseg
