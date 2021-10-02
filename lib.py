@@ -58,8 +58,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         if type(pat) is tuple:
             _call_pat_each_loop_end = pat[1]
             pat = pat[0]
-
     assert(len(pat) == beats)
+
     slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
     if "beat_delay" in songdata:
         slice_portion = slice_portion + s_to_ms(songdata["beat_delay"])
@@ -84,6 +84,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             pat = _back_pat_if_callable()
             if type(pat) is tuple:
                 pat = pat[0]
+            assert(len(pat) == beats)
+            print("pat now " + str(pat))
 
     if _temp_endbuf is not None:
         crossfade = cf_amount
