@@ -24,10 +24,10 @@ def arrange_like(origin, example):
     ret = []
     for i in example:
         ap = None
-        if i < 0 or i >= len(origin):
+        if i <= 0 or i > len(origin):
             ap = pydub.AudioSegment.empty()
         else:
-            ap = origin[i]
+            ap = origin[i - 1]
         ret.append(ap)
 
     return ret
@@ -48,13 +48,16 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         buf = buf[:-s_to_ms(songdata["end"])]
     supposed_len = len(buf)
  
-    pat = [0, 3, 2, 1] # 1,4,3,2
+    pat = [1, 4, 3, 2]
     if "new_order" in songdata:
         pat = songdata["new_order"]
     assert(len(pat) == beats)
     slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]))
     if "beat_delay" in songdata:
         slice_portion = slice_portion + s_to_ms(songdata["beat_delay"])
+    cf_amount = CF_AMOUNT
+    if "crossfade" in songdata:
+        cf_amount = songdata["crossfade"]
 
     while len(buf) > 0:
         segs = []
@@ -65,18 +68,18 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             segs.append(seg)
         segs = arrange_like(segs, pat)
         for part in segs:
-            crossfade = CF_AMOUNT
+            crossfade = cf_amount
             if (len(new_aud) < crossfade) or (len(part) < crossfade):
                 crossfade = 0
             new_aud = new_aud.append(part, crossfade=crossfade)
 
     if _temp_endbuf is not None:
-        crossfade = CF_AMOUNT
+        crossfade = cf_amount
         if len(new_aud) < crossfade:
             crossfade = 0
         new_aud = new_aud.append(_temp_endbuf, crossfade=crossfade)
 
-    assert(len(new_aud) + (supposed_len / slice_portion * CF_AMOUNT) == supposed_len)
+    assert((cf_amount != 0) or (len(new_aud) == supposed_len))
     new_aud = normalize(new_aud)
 
     return new_aud
