@@ -3,6 +3,8 @@ import math
 
 BEATS = 4
 CF_AMOUNT = 10
+# As for now this seems to be a good choice.
+# I'm battling this $4!7 during testing BIG SHOT
 ROUNDING = math.floor
 
 def get_song_seg(songdata):
@@ -12,8 +14,6 @@ def get_song_seg(songdata):
     return r
 
 def s_to_ms(n, rounding=ROUNDING):
-    # As for now this seems to be a good choice.
-    # I'm battling this $4!7 during testing BIG SHOT
     return rounding(n * 1000)
 
 def each_beat_takes_seconds(bpm):
@@ -65,6 +65,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             _call_pat_each_loop_end = pat[1]
             pat = pat[0]
     assert(len(pat) == beats)
+    print("Pattern is " + len(pat))
 
     slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]), rounding=rounding)
     if "beat_delay" in songdata:
@@ -72,6 +73,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     cf_amount = CF_AMOUNT
     if "crossfade" in songdata:
         cf_amount = songdata["crossfade"]
+    print("Crossfade uses " + "%dms" % cf_amount)
 
     while len(buf) > 0:
         segs = []
@@ -91,7 +93,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             if type(pat) is tuple:
                 pat = pat[0]
             assert(len(pat) == beats)
-            print("pat now " + str(pat))
+            print("Pattern is now " + str(pat))
 
     if _temp_endbuf is not None:
         crossfade = cf_amount
