@@ -78,23 +78,26 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         cf_amount = songdata["crossfade"]
     print("Crossfade uses " + "%dms" % cf_amount)
 
-    with tqdm(disable=None) as pbar:
+    with tqdm(disable=None, leave=False) as pbar:
         while len(buf) > 0:
             segs = []
-            for beat in trange(beats):
+            pbar.set_description("Trimming beats")
+            for beat in trange(beats, leave=False):
                 seg = buf[:slice_portion]
                 buf = buf[slice_portion:]
                 seg = normalize(seg)
                 segs.append(seg)
-                pbar.set_description("Progressing beat %d/%d" % (beat, beats))
+                t.update(0)
             segs = arrange_like(segs, pat, placeholder=pydub.AudioSegment.empty())
-            for parti in trange(len(segs)):
+            pbar.set_description("Appending beats")
+            for parti in trange(len(segs), leave=False):
                 part = segs[parti]
                 crossfade = cf_amount
                 if (len(new_aud) < crossfade) or (len(part) < crossfade):
                     crossfade = 0
                 new_aud = new_aud.append(part, crossfade=crossfade)
-                pbar.set_description("Appending beat %d/%d of shuffled list" % (beat, beats))
+                t.update(0)
+            pbar.set_description("...")
             if _back_pat_if_callable is not None and callable(_back_pat_if_callable) and _call_pat_each_loop_end:
                 _old_pat = pat
                 pat = _back_pat_if_callable(tick)
@@ -102,8 +105,10 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
                     pat = pat[0]
                 assert(len(pat) == beats)
                 if _old_pat != pat:
-                    print("Pattern is now " + str(pat))
+                    tqdm.write("Pattern is now " + str(pat))
+                t.update(0)
             tick = tick + 1
+            t.update()
 
     if _temp_endbuf is not None:
         crossfade = cf_amount
