@@ -3,6 +3,7 @@ import math
 
 BEATS = 4
 CF_AMOUNT = 10
+ROUNDING = math.floor
 
 def get_song_seg(songdata):
     r = pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
@@ -10,7 +11,7 @@ def get_song_seg(songdata):
         r = pydub.AudioSegment.from_mono_audiosegments(r, r)
     return r
 
-def s_to_ms(n, rounding=math.floor):
+def s_to_ms(n, rounding=ROUNDING):
     # As for now this seems to be a good choice.
     # I'm battling this $4!7 during testing BIG SHOT
     return rounding(n * 1000)
@@ -40,10 +41,10 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     _temp_endbuf = None
     new_aud = pydub.AudioSegment.empty()
 
-    rounding = None # determined by function
+    rounding = ROUNDING
     if "rounding" in songdata:
         rounding = songdata["rounding"]
-        assert(callable(rounding))
+    assert(callable(rounding))
 
     if "start" in songdata:
         new_aud.append(normalize(buf[:s_to_ms(songdata["start"], rounding=rounding)]), crossfade=0)
