@@ -87,7 +87,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
                 buf = buf[slice_portion:]
                 seg = normalize(seg)
                 segs.append(seg)
-                t.update(0)
+                pbar.update(0)
             segs = arrange_like(segs, pat, placeholder=pydub.AudioSegment.empty())
             pbar.set_description("Appending beats")
             for parti in trange(len(segs), leave=False):
@@ -96,7 +96,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
                 if (len(new_aud) < crossfade) or (len(part) < crossfade):
                     crossfade = 0
                 new_aud = new_aud.append(part, crossfade=crossfade)
-                t.update(0)
+                pbar.update(0)
             pbar.set_description("...")
             if _back_pat_if_callable is not None and callable(_back_pat_if_callable) and _call_pat_each_loop_end:
                 _old_pat = pat
@@ -106,9 +106,9 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
                 assert(len(pat) == beats)
                 if _old_pat != pat:
                     tqdm.write("Pattern is now " + str(pat))
-                t.update(0)
+                pbar.update(0)
             tick = tick + 1
-            t.update()
+            pbar.update()
 
     if _temp_endbuf is not None:
         crossfade = cf_amount
