@@ -47,6 +47,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         rounding = songdata["rounding"]
     assert(callable(rounding))
     log = tqdm.write # TODO: disable functionality
+    # dont_show_progress = interactive and None or True
 
     if "start" in songdata:
         new_aud.append(normalize(buf[:s_to_ms(songdata["start"], rounding=rounding)]), crossfade=0)
