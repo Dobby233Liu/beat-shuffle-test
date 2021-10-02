@@ -86,6 +86,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
                 buf = buf[slice_portion:]
                 seg = normalize(seg)
                 segs.append(seg)
+                progress.update((beat+1)/beats)
             segs = arrange_like(segs, pat, placeholder=pydub.AudioSegment.empty())
             for part in segs:
                 crossfade = cf_amount
