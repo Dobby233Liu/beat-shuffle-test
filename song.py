@@ -7,9 +7,9 @@ song["ff"] = "ogg"
 
 song["bpm"] = 140 # beat per minute
 
-order = [1, 2, 3, 4]
+choices = [1, 2, 3, 4, 0]
 def new_order():
     random.shuffle(order)
-    return order, True
+    return order[:3], True
 
 song["new_order"] = new_order
