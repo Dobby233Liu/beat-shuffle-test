@@ -3,7 +3,7 @@ name: "WATCH ME FLY, [MAMA]!"
 on: [push, workflow_dispatch]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +14,7 @@ jobs:
         python-version: 3.9
     - name: Install dependencies
       run: |
-        pip install pydub
+        pip install -r requirements.txt
         sudo apt-get install ffmpeg
     - name: Less go
       run: python main.py
