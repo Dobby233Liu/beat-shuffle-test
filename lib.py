@@ -2,7 +2,7 @@ import pydub
 import math
 
 BEATS = 4
-CF_AMOUNT = 0#10
+CF_AMOUNT = 10
 
 def get_song_seg(songdata):
     r = pydub.AudioSegment.from_file(songdata["fn"], songdata["ff"])
@@ -76,8 +76,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             crossfade = 0
         new_aud = new_aud.append(_temp_endbuf, crossfade=crossfade)
 
-    print(len(new_aud))
-    print(supposed_len)
+    assert(len(new_aud) + (supposed_len / slice_portion * CF_AMOUNT) == supposed_len)
     new_aud = normalize(new_aud)
 
     return new_aud
