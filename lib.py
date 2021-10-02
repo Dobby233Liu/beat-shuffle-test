@@ -1,5 +1,4 @@
 import pydub
-import random
 import math
 
 BEATS = 4
