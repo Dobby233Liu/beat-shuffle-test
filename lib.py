@@ -49,15 +49,14 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     log = tqdm.write # TODO: disable functionality
     # dont_show_progress = interactive and None or True
 
+    beats = songdata.get("beats", BEATS)
     if "start" in songdata:
         new_aud.append(normalize(buf[:s_to_ms(songdata["start"], rounding=rounding)]), crossfade=0)
         buf = buf[s_to_ms(songdata["start"], rounding=rounding):]
     if "end" in songdata:
         _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"], rounding=rounding):0])
         buf = buf[:-s_to_ms(songdata["end"], rounding=rounding)]
-
     tick = -1
-
     _back_pat_if_callable = None
     _call_pat_each_loop_end = False
     pat = [1, 4, 3, 2]
@@ -70,7 +69,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             _call_pat_each_loop_end = pat[1]
             pat = pat[0]
     assert(len(pat) == beats)
-    log("Pattern is " + str(pat))
+    log("%d BPM, %d/Who cares" % (songdata["bpm"], beats))
+    log("Swap pattern is " + str(pat))
 
     slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]), rounding=rounding)
     if "beat_delay" in songdata:
@@ -78,6 +78,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     cf_amount = CF_AMOUNT
     if "crossfade" in songdata:
         cf_amount = songdata["crossfade"]
+    log("One beat takes %dms" % slice_portion)
     log("Crossfade uses " + "%dms" % cf_amount)
 
     with tqdm(disable=None, leave=False) as pbar:
@@ -124,7 +125,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
 
 def shuffle_beats(songdata):
     songseg = get_song_seg(songdata)
-    songseg = _shuffle_beats(songdata, songseg, beats=songdata.get("beats", BEATS))
+    songseg = _shuffle_beats(songdata, songseg)
     return songseg
 
 def shuffle_beats_and_export(songdata):
