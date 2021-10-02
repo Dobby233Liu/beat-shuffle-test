@@ -59,8 +59,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     while len(buf) > 0:
         segs = []
         for beat in range(beats):
-            seg = buf[:slice_portion+1]
-            buf = buf[slice_portion-1:]
+            seg = buf[:slice_portion]
+            buf = buf[slice_portion:]
             seg = normalize(seg)
             segs.append(seg)
         segs = arrange_like(segs, pat)
@@ -76,7 +76,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             crossfade = 0
         new_aud = new_aud.append(_temp_endbuf, crossfade=crossfade)
 
-    assert(len(new_aud) == supposed_len)
+    print(len(new_aud))
+    print(supposed_len)
     new_aud = normalize(new_aud)
 
     return new_aud
