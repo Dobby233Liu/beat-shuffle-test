@@ -53,6 +53,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"], rounding=rounding):0])
         buf = buf[:-s_to_ms(songdata["end"], rounding=rounding)]
 
+    tick = -1
+
     _back_pat_if_callable = None
     _call_pat_each_loop_end = False
     pat = [1, 4, 3, 2]
@@ -60,7 +62,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         pat = songdata["new_order"]
     if callable(pat):
         _back_pat_if_callable = pat
-        pat = _back_pat_if_callable()
+        pat = _back_pat_if_callable(tick)
         if type(pat) is tuple:
             _call_pat_each_loop_end = pat[1]
             pat = pat[0]
@@ -75,27 +77,30 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         cf_amount = songdata["crossfade"]
     print("Crossfade uses " + "%dms" % cf_amount)
 
-    while len(buf) > 0:
-        segs = []
-        for beat in range(beats):
-            seg = buf[:slice_portion]
-            buf = buf[slice_portion:]
-            seg = normalize(seg)
-            segs.append(seg)
-        segs = arrange_like(segs, pat, placeholder=pydub.AudioSegment.empty())
-        for part in segs:
-            crossfade = cf_amount
-            if (len(new_aud) < crossfade) or (len(part) < crossfade):
-                crossfade = 0
-            new_aud = new_aud.append(part, crossfade=crossfade)
-        if _back_pat_if_callable is not None and callable(_back_pat_if_callable) and _call_pat_each_loop_end:
-            _old_pat = pat
-            pat = _back_pat_if_callable()
-            if type(pat) is tuple:
-                pat = pat[0]
-            assert(len(pat) == beats)
-            if _old_pat != pat:
-                print("Pattern is now " + str(pat))
+    with tqdm() as progress:
+        while len(buf) > 0:
+            segs = []
+            for beat in range(beats):
+                seg = buf[:slice_portion]
+                buf = buf[slice_portion:]
+                seg = normalize(seg)
+                segs.append(seg)
+            segs = arrange_like(segs, pat, placeholder=pydub.AudioSegment.empty())
+            for part in segs:
+                crossfade = cf_amount
+                if (len(new_aud) < crossfade) or (len(part) < crossfade):
+                    crossfade = 0
+                new_aud = new_aud.append(part, crossfade=crossfade)
+            if _back_pat_if_callable is not None and callable(_back_pat_if_callable) and _call_pat_each_loop_end:
+                _old_pat = pat
+                pat = _back_pat_if_callable(tick)
+                if type(pat) is tuple:
+                    pat = pat[0]
+                assert(len(pat) == beats)
+                if _old_pat != pat:
+                    print("Pattern is now " + str(pat))
+            tick = tick + 1
+            progress.update(1)
 
     if _temp_endbuf is not None:
         crossfade = cf_amount
