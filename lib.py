@@ -89,11 +89,13 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
                 crossfade = 0
             new_aud = new_aud.append(part, crossfade=crossfade)
         if _back_pat_if_callable is not None and callable(_back_pat_if_callable) and _call_pat_each_loop_end:
+            _old_pat = pat
             pat = _back_pat_if_callable()
             if type(pat) is tuple:
                 pat = pat[0]
             assert(len(pat) == beats)
-            print("Pattern is now " + str(pat))
+            if _old_pat != pat:
+                print("Pattern is now " + str(pat))
 
     if _temp_endbuf is not None:
         crossfade = cf_amount
