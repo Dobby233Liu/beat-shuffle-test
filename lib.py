@@ -78,7 +78,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
         cf_amount = songdata["crossfade"]
     print("Crossfade uses " + "%dms" % cf_amount)
 
-    with tqdm() as progress:
+    with tqdm():
         while len(buf) > 0:
             segs = []
             for beat in trange(beats):
