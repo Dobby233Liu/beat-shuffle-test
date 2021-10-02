@@ -11,10 +11,10 @@ def get_song_seg(songdata):
         r = pydub.AudioSegment.from_mono_audiosegments(r, r)
     return r
 
-def s_to_ms(n):
+def s_to_ms(n, rounding=math.floor):
     # As for now this seems to be a good choice.
     # I'm battling this $4!7 during testing BIG SHOT
-    return math.floor(n * 1000)
+    return rounding(n * 1000)
 
 def each_beat_takes_seconds(bpm):
     return 60 / bpm
@@ -24,12 +24,17 @@ def arrange_like(origin, example):
 
     ret = []
     for i in example:
-        ret.append(origin[i])
+        ap = None
+        if i < 0 or i >= len(origin):
+            ap = pydub.AudioSegment.empty()
+        else:
+            ap = origin[i]
+        ret.append(ap)
 
     return ret
 
 def normalize(seg):
-    return seg.normalize().remove_dc_offset()
+    return seg.normalize()#.remove_dc_offset()
 
 def _shuffle_beats(songdata, songseg, beats=BEATS):
     buf = songseg
@@ -42,7 +47,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     if "end" in songdata:
         _temp_endbuf = normalize(buf[-s_to_ms(songdata["end"]):0])
         buf = buf[:-s_to_ms(songdata["end"])]
-    #supposed_len = len(buf)
+    supposed_len = len(buf)
  
     pat = [0, 3, 2, 1] # 1,4,3,2
     if "new_order" in songdata:
@@ -55,8 +60,8 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     while len(buf) > 0:
         segs = []
         for beat in range(beats):
-            seg = buf[:slice_portion]
-            buf = buf[slice_portion:]
+            seg = buf[:slice_portion-1]
+            buf = buf[slice_portion+1:]
             seg = normalize(seg)
             segs.append(seg)
         segs = arrange_like(segs, pat)
@@ -72,8 +77,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             crossfade = 0
         new_aud = new_aud.append(_temp_endbuf, crossfade=crossfade)
 
-    # Crossfade?
-    #assert(len(new_aud) == supposed_len)
+    assert(len(new_aud) == supposed_len)
     new_aud = normalize(new_aud)
 
     return new_aud
