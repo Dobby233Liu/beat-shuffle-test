@@ -46,6 +46,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     if "rounding" in songdata:
         rounding = songdata["rounding"]
     assert(callable(rounding))
+    log = tqdm.write # TODO: disable functionality
 
     if "start" in songdata:
         new_aud.append(normalize(buf[:s_to_ms(songdata["start"], rounding=rounding)]), crossfade=0)
@@ -68,7 +69,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
             _call_pat_each_loop_end = pat[1]
             pat = pat[0]
     assert(len(pat) == beats)
-    print("Pattern is " + str(pat))
+    log("Pattern is " + str(pat))
 
     slice_portion = s_to_ms(each_beat_takes_seconds(songdata["bpm"]), rounding=rounding)
     if "beat_delay" in songdata:
@@ -76,13 +77,13 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
     cf_amount = CF_AMOUNT
     if "crossfade" in songdata:
         cf_amount = songdata["crossfade"]
-    print("Crossfade uses " + "%dms" % cf_amount)
+    log("Crossfade uses " + "%dms" % cf_amount)
 
     with tqdm(disable=None, leave=False) as pbar:
         while len(buf) > 0:
             segs = []
             pbar.set_description("Trimming beats")
-            for beat in trange(beats, leave=False):
+            for beat in trange(beats, leave=False, disable=None):
                 seg = buf[:slice_portion]
                 buf = buf[slice_portion:]
                 seg = normalize(seg)
@@ -90,7 +91,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
                 pbar.update(0)
             segs = arrange_like(segs, pat, placeholder=pydub.AudioSegment.empty())
             pbar.set_description("Appending beats")
-            for parti in trange(len(segs), leave=False):
+            for parti in trange(len(segs), leave=False, disable=None):
                 part = segs[parti]
                 crossfade = cf_amount
                 if (len(new_aud) < crossfade) or (len(part) < crossfade):
@@ -105,7 +106,7 @@ def _shuffle_beats(songdata, songseg, beats=BEATS):
                     pat = pat[0]
                 assert(len(pat) == beats)
                 if _old_pat != pat:
-                    tqdm.write("Pattern is now " + str(pat))
+                    log("Pattern is now " + str(pat))
                 pbar.update(0)
             tick = tick + 1
             pbar.update()
