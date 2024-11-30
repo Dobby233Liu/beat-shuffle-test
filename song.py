@@ -1,15 +1,9 @@
-import random
-
 song = {}
 
-song["fn"] = "berdly_chase.ogg" # Smart Race
-song["ff"] = "ogg"
+song["fn"] = "th16_16_f.wav"
+song["ff"] = "wav"
 
-song["bpm"] = 150 # beat per minute
+song["bpm"] = 170 # beat per minute
 
-def new_order(tick):
-    ret = [1, 4, 3, 2]
-    if tick % 9 > 4:
-        ret = [3, 2, 1, 4]
-    return ret, True
-song["new_order"] = new_order
+song["new_order"] = [4,3,2,1]
+song["crossfade"] = 0

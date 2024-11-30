@@ -35,7 +35,8 @@ def arrange_like(origin, example, placeholder=None):
     return ret
 
 def normalize(seg):
-    return seg.normalize().remove_dc_offset()
+    return seg
+    #return seg.normalize().remove_dc_offset()
 
 def _shuffle_beats(songdata, songseg, beats=BEATS):
     buf = songseg
